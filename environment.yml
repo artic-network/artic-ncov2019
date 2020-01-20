@@ -1,0 +1,30 @@
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3
+  - nodejs=12
+  - biopython=1.70=np112py36_1
+  - bwa=0.7.17=pl5.22.0_2
+  - clint=0.5.1=py36_0
+  - eigen=3.2=3
+  - pysam=0.11.2.2=py36_1
+  - pyvcf=0.6.8=py36_0
+  - ete3=3.1.1=py36_0
+  - goalign=0.2.8=0
+  - gotree=0.2.10=0
+  - libdeflate=0.8=0
+  - muscle=3.8.1551=2
+  - nanopolish=0.9.2=py36_ncurses5.9_4
+  - phyml=3.3.20190909 # references etetoolkit build
+  - pandas=0.23.0=py36_1
+  - samtools=1.8=4
+  - mafft=7.407=0
+  - iqtree=1.6.12
+  - datrie=0.8
+  - artic-network::rampart=1.0
+  - pip
+  - pip:
+    - git+https://github.com/artic-network/fieldbioinformatics.git
+    - git+https://github.com/artic-network/Porechop.git@v0.3.2pre
