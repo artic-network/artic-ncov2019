@@ -1,5 +1,5 @@
 {
-  "name": "ARTIC Ebola virus protocol v2.0",
-  "description": "Amplicon based sequencing of Ebola virus (Zaire species).",
+  "name": "ARTIC nCoV2019 protocol v1.0",
+  "description": "Amplicon based sequencing of novel coronavirus 2019 (nCoV2019).",
   "url": "http://artic.network/"
 }

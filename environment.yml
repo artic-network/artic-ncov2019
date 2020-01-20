@@ -1,3 +1,4 @@
+name: artic-ncov2019
 channels:
   - bioconda
   - conda-forge
@@ -23,8 +24,12 @@ dependencies:
   - mafft=7.407=0
   - iqtree=1.6.12
   - datrie=0.8
+  - snakemake-minimal=5.8.1
+  - biopython=1.74
+  - minimap2=2.17
   - artic-network::rampart=1.0
   - pip
   - pip:
     - git+https://github.com/artic-network/fieldbioinformatics.git
     - git+https://github.com/artic-network/Porechop.git@v0.3.2pre
+    - binlorry==1.3.0_alpha1
