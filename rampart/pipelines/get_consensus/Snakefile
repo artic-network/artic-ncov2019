@@ -21,48 +21,19 @@ if config.get("annotated_path"):
 else:
     config["annotated_path"] = "annotations"
 
-samples = {}
 barcode_string = ''
 barcodes = []
 barcode_to_samples = {}
-if config.get("samples"):
-    try:
-        handle = config["samples"]
 
-        samples = yaml.safe_load(handle)
+if config.get("barcodes"):
+    barcodes = config["barcodes"]
 
-        for s in samples:
-            for barcode in samples[s]:
-                barcode_to_samples[barcode] = s
-                barcodes.append(barcode)
-                barcode_string += barcode + " "
-        barcode_string = barcode_string.rstrip(" ")
-
-    except:
-        handle = config["samples"]
-
-        sample_csv = yaml.safe_load(handle)
-
-        barcodes = sample_csv.split(',')
-
-        barcode_string = ' '.join(barcodes)
-        for barcode in checked_barcodes:
-            samples[barcode] = [barcode]
-            barcode_to_samples[barcode] = barcode
-elif config.get("barcodes"):
-    try:
-        handle = config["barcodes"]
-        barcodes = yaml.safe_load(handle)
-        for barcode in barcodes:
-            barcode_to_samples[barcode] = barcode
-            samples[barcode] = [barcode]
-            barcode_string+=barcode + " "
-            barcodes.append(barcode)
-    except:
-        barcodes = ["none"]
-        barcode_string = "none"
-        samples["nCoV2019"] = ["none"]
-        barcode_to_samples["none"] = "nCoV2019"
+    print(barcodes)
+    for barcode in barcodes:
+        barcode_to_samples[barcode] = barcode
+        samples[barcode] = [barcode]
+        barcode_string+=barcode + " "
+        barcodes.append(barcode)
 else:
     barcodes = ["none"]
     barcode_string = "none"
