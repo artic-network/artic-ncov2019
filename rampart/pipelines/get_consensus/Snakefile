@@ -68,7 +68,7 @@ rule all:
     input:
         expand("binned_{barcode}.csv",barcode=barcodes),
         f"{run_name}_sequencing_summary.txt",
-        expand("{barcode}.consensus.fasta",barcode=barcodes)
+        f"{barcode}_temp.txt"
         
 
 rule binlorry:
@@ -151,12 +151,9 @@ rule minion_nanopolish:
     params:
         primer_scheme_dir = workflow.current_basedir + "/../../../primer_schemes",
         primer_version = "nCoV-2019/V1",
-        sample_name = "{barcode}"
+        sample_name = barcode_to_samples["{barcode}"]
     output:
-        "{barcode}.primertrimmed.sorted.bam",
-        "{barcode}.primertrimmed.vcf",
-        "{barcode}.alignreport.txt",
-        "{barcode}.consensus.fasta"
+        "{barcode}_temp.txt"
     shell:
         """
         artic minion \
@@ -165,5 +162,5 @@ rule minion_nanopolish:
         --read-file {input.read_file} \
         --nanopolish-read-file {input.read_file} \
         {params.primer_version} \
-        {params.sample_name} 
+        {params.sample_name} && touch temp.txt
         """
