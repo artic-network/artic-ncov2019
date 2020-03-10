@@ -1,0 +1,220 @@
+import yaml 
+import csv
+import pandas as pd
+import os
+from Bio import SeqIO
+
+##### Configuration #####
+
+run_name = ""
+if config.get("run_name"):
+    run_name = config["run_name"]
+else:
+    run_name = "nCoV2019"
+
+config["basecalled_path"] = config["basecalled_path"].rstrip("/")
+config["fast5_path"] = config["fast5_path"].rstrip("/")
+
+if config.get("annotated_path"):
+    config["annotated_path"] = config["annotated_path"].rstrip("/")
+else:
+    config["annotated_path"] = "annotations"
+
+if config.get("output_path"):
+    config["output_path"] = config["output_path"].rstrip("/")
+else:
+    config["output_path"] = "analysis"
+
+samples = {}
+barcode_string = ''
+barcodes = []
+barcode_to_samples = {}
+if config.get("samples"):
+    try:
+        handle = config["samples"]
+
+        samples = yaml.safe_load(handle)
+
+        for s in samples:
+            for barcode in samples[s]:
+                barcode_to_samples[barcode] = s
+                barcodes.append(barcode)
+                barcode_string += barcode + " "
+        barcode_string = barcode_string.rstrip(" ")
+
+    except:
+        handle = config["samples"]
+
+        sample_csv = yaml.safe_load(handle)
+
+        barcodes = sample_csv.split(',')
+
+        barcode_string = ' '.join(barcodes)
+        for barcode in checked_barcodes:
+            samples[barcode] = [barcode]
+            barcode_to_samples[barcode] = barcode
+
+else:
+    barcodes = ["none"]
+    barcode_string = "none"
+    samples["nCoV2019"] = ["none"]
+    barcode_to_samples["none"] = "nCoV2019"
+
+
+##### Workflow #####
+
+rule all:
+    input:
+        expand("binned_{barcode}.csv",barcode=barcodes),
+        f"{run_name}_sequencing_summary.txt"
+        
+
+rule binlorry:
+    input:
+    params:
+        path_to_reads = config["basecalled_path"],
+        report_dir = config["annotated_path"],
+        # outdir = config["output_path"],
+        min_read_length = config["min_read_length"],
+        max_read_length = config["max_read_length"],
+        barcode_str = barcode_string,
+        output_prefix= "binned"
+    output:
+        expand("binned_{barcode}.fastq",barcode = barcodes),
+        expand("binned_{barcode}.csv",barcode = barcodes)
+    shell:
+        "binlorry -i {params.path_to_reads:q} "
+        "-t {params.report_dir:q} "
+        "-o {params.output_prefix:q} "
+        "-n {params.min_read_length} "
+        "-x {params.max_read_length} "
+        "-v 0 "
+        "--bin-by barcode "
+        "--filter-by barcode {params.barcode_str} "
+        "--filter-by best_reference nCoV2019 "
+        "--force-output "
+        "--out-report"
+
+rule get_sequencing_summary_file:
+    input:
+    params:
+        path_to_reads = config["basecalled_path"]
+    output:
+        f"{run_name}_sequencing_summary.txt"
+    run:
+        summary_files = []
+        for r,d,f in os.walk(str(params.path_to_reads)):
+            for fn in f:
+                if fn.endswith("_summary.txt"):
+                    summary_files.append(r + '/' + fn)
+        print(f"Number of sequencing summary files found: {len(summary_files)}")
+
+        summaryfh = open(str(output[0]), "w")
+        for summaryfn in summary_files:
+            df = pd.read_csv(summaryfn, sep="\t")
+            # support for local basecalling
+            if 'filename_fast5' in df.columns:
+                df['filename'] = df['filename_fast5']	
+            dfs.append(df)
+
+        pd.concat(dfs).to_csv(summaryfh, sep="\t", index=False)
+        summaryfh.close()
+        
+# rule minion_medaka:
+#     input:
+#         read_file = "binned_{barcode}.fastq"
+#     params:
+#         primer_scheme_dir = "../../primer_schemes",
+#         primer_version = "nCoV-2019/V1",
+#         sample_name = "{barcode}"
+#     threads:
+#         8
+#     output:
+#         "{barcode}.primertrimmed.sorted.bam",
+#         "{barcode}.primertrimmed.vcf",
+#         "{barcode}.alignreport.txt",
+#         "{barcode}.consensus.fasta"
+#     shell:
+#         """
+#         artic minion \
+#         --medaka --normalise 200 --minimap2 \
+#         --scheme-directory {params.primer_scheme_dir} \
+#         --read-file {input.read_file} \
+#         {params.primer_version} \
+#         {params.barcode} 
+#         """
+
+rule nanopolish_index: 
+    input:
+        summary = rules.get_sequencing_summary_file.output,
+        reads = "binned_{barcode}.fastq"
+    params:
+        path_to_fast5 = config["fast5_path"]
+    output:
+        fai= "binned_{barcode}.fastq.index.fai",
+        gzi= "binned_{barcode}.fastq.index.gzi",
+        readdb= "binned_{barcode}.fastq.index.readdb",
+        index= "binned_{barcode}.fastq.index"
+    shell:
+        """
+        nanopolish index \
+        -s {input.summary} \
+        -d {params.path_to_fast5} \
+        {input.reads} 
+        """
+
+rule minion_nanopolish:
+    input:
+        read_file = "binned_{barcode}.fastq",
+        readdb= "binned_{barcode}.fastq.index.readdb",
+        index= "binned_{barcode}.fastq.index"
+    params:
+        primer_scheme_dir = "../../primer_schemes",
+        primer_version = "nCoV-2019/V1",
+        sample_name = "{barcode}"
+    output:
+        "{barcode}.primertrimmed.sorted.bam",
+        "{barcode}.primertrimmed.vcf",
+        "{barcode}.alignreport.txt",
+        "{barcode}.consensus.fasta"
+    shell:
+        """
+        artic minion \
+        --normalise 200 \
+        --scheme-directory {params.primer_scheme_dir} \
+        --read-file {input.read_file} \
+        --nanopolish-read-file {input.read_file} \
+        {params.primer_version} \
+        {params.sample_name} 
+        """
+
+
+# rule gather:
+#     input:
+#     params:
+#         path_to_reads = config["basecalled_path"]
+#     output:
+#         summary=f"{run_name}_sequencing_summary.txt",
+#         reads=f"{run_name}_fastq_pass.fastq"
+#     shell:
+#         """
+#         artic gather \
+#         --min-length {params.min_length} \
+#         --max-length {params.max_length} \
+#         --prefix {params.run_name} \
+#         --directory {params.path_to_reads} 
+#         """
+
+# rule nanopolish_index: 
+#     input:
+#         summary = rules.gather.output.summary,
+#         reads = rules.gather.output.reads
+#     params:
+#         path_to_fast5= lambda wildcards : config["path_to_fast5"]
+#     output:
+#         fai= run_name+"_all.fastq.index.fai",
+#         gzi= run_name+"_all.fastq.index.gzi",
+#         readdb= run_name+"_all.fastq.index.readdb",
+#         index=run_name+"_all.fastq.index"
+#     shell:
+#         "nanopolish index -s {input.summary} -d {params.path_to_fast5} {input.reads}"
