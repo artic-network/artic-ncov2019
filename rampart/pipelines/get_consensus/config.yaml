@@ -3,12 +3,6 @@
 fast5_path: path/to/fast5
 basecalled_path: path/to/data
 annotated_path: annotations
-output_path: analysis 
-
-
-##### Mapping reference panel #####
-
-references_file: ../../references.fasta
 
 
 ##### Read length filtering range #####

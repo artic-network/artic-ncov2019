@@ -21,11 +21,6 @@ if config.get("annotated_path"):
 else:
     config["annotated_path"] = "annotations"
 
-if config.get("output_path"):
-    config["output_path"] = config["output_path"].rstrip("/")
-else:
-    config["output_path"] = "analysis"
-
 samples = {}
 barcode_string = ''
 barcodes = []
@@ -54,7 +49,14 @@ if config.get("samples"):
         for barcode in checked_barcodes:
             samples[barcode] = [barcode]
             barcode_to_samples[barcode] = barcode
-
+elif config.get("barcodes"):
+    try:
+        handle = config["barcodes"]
+        for barcode in barcodes:
+            barcode_to_samples[barcode] = barcode
+            samples[barcode] = [barcode]
+            barcode_string+=barcode + " "
+            barcodes.append(barcode)
 else:
     barcodes = ["none"]
     barcode_string = "none"
@@ -68,7 +70,7 @@ rule all:
     input:
         expand("binned_{barcode}.csv",barcode=barcodes),
         f"{run_name}_sequencing_summary.txt",
-        expand(f"{barcode}_temp.txt",barcode=barcodes)
+        expand("{barcode}.consensus.fasta",barcode=barcodes)
         
 
 rule binlorry:
@@ -76,7 +78,6 @@ rule binlorry:
     params:
         path_to_reads = config["basecalled_path"],
         report_dir = config["annotated_path"],
-        # outdir = config["output_path"],
         min_read_length = config["min_read_length"],
         max_read_length = config["max_read_length"],
         barcode_str = barcode_string,
@@ -151,9 +152,12 @@ rule minion_nanopolish:
     params:
         primer_scheme_dir = workflow.current_basedir + "/../../../primer_schemes",
         primer_version = "nCoV-2019/V1",
-        sample_name = barcode_to_samples["{barcode}"]
+        sample_name = "{barcode}"
     output:
-        "{barcode}_temp.txt"
+        "{barcode}.primertrimmed.sorted.bam",
+        "{barcode}.primertrimmed.vcf",
+        "{barcode}.alignreport.txt",
+        "{barcode}.consensus.fasta"
     shell:
         """
         artic minion \
@@ -162,5 +166,5 @@ rule minion_nanopolish:
         --read-file {input.read_file} \
         --nanopolish-read-file {input.read_file} \
         {params.primer_version} \
-        {params.sample_name} && touch temp.txt
+        {params.sample_name} 
         """
