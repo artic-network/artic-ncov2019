@@ -5,7 +5,7 @@ import os
 from Bio import SeqIO
 
 ##### Configuration #####
-configfile="config.yaml"
+configfile: "config.yaml"
 
 run_name = ""
 if config.get("run_name"):
