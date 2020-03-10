@@ -68,7 +68,7 @@ rule all:
     input:
         expand("binned_{barcode}.csv",barcode=barcodes),
         f"{run_name}_sequencing_summary.txt",
-        f"{barcode}_temp.txt"
+        expand(f"{barcode}_temp.txt",barcode=barcodes)
         
 
 rule binlorry:
