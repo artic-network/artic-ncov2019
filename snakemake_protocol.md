@@ -189,7 +189,7 @@ nanopolish index -s run_name_sequencing_summary.txt -d /path/to/fast5_pass run_n
 
 Again, alter ``/path/to/fast5_pass`` to point to the location of the FAST5 files.
 
-## Detailed usage: 4) Run the MinION pipeline
+### Detailed usage: 4) Run the MinION pipeline
 
 For each barcode you wish to process (e.g. run this command 12 times for 12 barcodes), replacing the file name and sample name as appropriate:
 
@@ -207,7 +207,7 @@ E.g. for NB02
 artic minion --normalise 200 --threads 4 --scheme-directory ~/artic/artic-ncov2019/primer-schemes --read-file binned_NB02.fastq --nanopolish-read-file run_name_pass.fastq nCoV-2019/V1 sample2
 ```
 
-## Output files
+## ARTIC MinION Output files
 
    * ``sample1.primertrimmed.bam`` - BAM file for visualisation after primer-binding site trimming
    * ``sample1.vcf`` - detected variants in VCF format
@@ -220,7 +220,7 @@ To put all the consensus sequences in one filei called my_consensus_genome, run
 cat *.consensus.fasta > my_consensus_genomes.fasta
 ```
 
-## To visualise genomes in Tablet
+## Step 3: Visualise genomes in Tablet
 
 Open a new Terminal window:
 
