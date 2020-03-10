@@ -13,8 +13,8 @@ references_file: ../../references.fasta
 
 ##### Read length filtering range #####
 
-min_read_length: 250
-max_read_length: 500
+min_read_length: 370
+max_read_length: 700
 
 
 ##### Barcodes to process #####
