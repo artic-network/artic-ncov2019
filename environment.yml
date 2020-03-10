@@ -32,4 +32,4 @@ dependencies:
   - pip:
     - git+https://github.com/artic-network/fieldbioinformatics.git
     - git+https://github.com/artic-network/Porechop.git@v0.3.2pre
-    - git+https://github.com/rambaut/binlorry@1.3.0_alpha1_patch
+    - binlorry==1.3.1
