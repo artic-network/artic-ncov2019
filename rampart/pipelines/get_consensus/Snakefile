@@ -57,6 +57,11 @@ elif config.get("barcodes"):
             samples[barcode] = [barcode]
             barcode_string+=barcode + " "
             barcodes.append(barcode)
+    except:
+        barcodes = ["none"]
+        barcode_string = "none"
+        samples["nCoV2019"] = ["none"]
+        barcode_to_samples["none"] = "nCoV2019"
 else:
     barcodes = ["none"]
     barcode_string = "none"
