@@ -30,7 +30,7 @@ content='**Overview:** A complete bioinformatics protocol to take the output fro
 Set up the computing environment as described here in this document: [ncov2019-it-setup](ncov2019-it-setup.html). This should be done and tested prior to sequencing, particularly if this will be done in an environment without internet access or where this is slow or unreliable. Once this is done, the bioinformatics can be performed largely off-line. If you are already using the [lab-on-an-SSD](https://github.com/artic-network/fieldbioinformatics/tree/master/lab-on-an-ssd), you can skip this step.
 
 
-## Activate the ARTIC environment:
+### Activate the ARTIC environment:
 
 All steps in this tutorial should be performed in the ```artic-ncov2019``` conda environment:
 
@@ -38,7 +38,7 @@ All steps in this tutorial should be performed in the ```artic-ncov2019``` conda
 source activate artic-ncov2019
 ```
 
-## Make a new directory for analysis
+### Make a new directory for analysis
 
 Give your run directory a meaningful name, e.g.. minion_run1
 
@@ -47,12 +47,16 @@ mkdir run_name
 cd run_name
 
 ```
+## Step 1: Basecalling
 
-### Basecalling with Guppy
+### Basecalling with MinKNOW (live)
+When running the MinION, basecalling can be run live using MinKNOW. Particularly if you're planning on running RAMPART, this is the most sensible option. guppy GPU basecalling will keep up with the rate of data production and let you see read coverage of your sample increasing in real-time. The best ways to run guppy GPU basecalling are with a MinIT or using the ARTIC-Network [lab-on-an-SSD](https://github.com/artic-network/lab-on-an-SSD) on a gpu-laptop.  
 
-If you did basecalling with MinKNOW, you can skip this step.
+### Basecalling with Guppy 
 
-Run the Guppy basecaller on the new MinION run folder:
+If you did live basecalling with MinKNOW, you can skip this step.
+
+Otherwise, run the Guppy basecaller on the new MinION run folder:
 
 For fast mode basecalling:
 
@@ -75,29 +79,31 @@ run are. Common locations are:
    
 This will create a folder called `run_name` with the base-called reads in it.
 
+## Step 2: Data analysis
+
+Double check you're in the correct directory (Hint: type ``pwd`` into your terminal). You should be in your MinION run directory.
 
 ### Running RAMPART
 
 Ensure you have activated the conda environment and then simply type:
+
 ```
 rampart --protocol ~/artic-ncov2019/rampart
 ```
 
-In a web browser, navigate to localhost:3000 to view RAMPART.
+In a web browser, navigate to localhost:3000 to view your samples on RAMPART.
 (Note: this does not require an internet connection)  
 
 
-## Downstream analysis
-
 ### Setup for consensus generation
 
-In a new terminal window, navigate to your run directory e.g. minion_run1.
+Open a new terminal window and navigate to your run directory again e.g. minion_run1.
 
 ```
 cd minion_run1
 ```
 
-If RAMPART has run successfully you will see a directory has been created in here called ``annotations``.
+If RAMPART has run successfully you will see a directory has been created in here called ``annotations`` (Hint: type ``ls`` to see if this directory exists).
 
 Make a directory for you to put your analysis and navigate into it.
 
@@ -106,18 +112,7 @@ mkdir analysis
 cd analysis
 ```
 
-### Quick usage: Generate a consensus sequence for each barcode using the ARTIC pipeline
-
-e.g. to run the ARTIC pipeline for barcodes NB01, NB02 and NB03
-
-```
-snakemake --snakefile ~/artic-ncov2019/rampart/pipelines/get_consensus/Snakefile \
---config \
-basecalled_path=path/to/fastq_pass \
-fast5_path=path/to/fast5_pass \
-annotated_path=../annotations \
-barcodes=NB01,NB02,NB03
-```
+### Quick usage: Generate a consensus sequence using the ARTIC pipeline
 
 If you haven't used barcodes and are just running one sample, simply type:
 
@@ -129,13 +124,28 @@ fast5_path=path/to/fast5_pass \
 annotated_path=../annotations 
 ```
 
-### Detailed usage: Generate a consensus sequence for each barcode using the ARTIC pipeline
+### Quick usage: Generate a consensus sequence for each barcode using the ARTIC pipeline
+e.g. to run the ARTIC pipeline for barcodes NB01, NB02 and NB03
 
-From the output of RAMPART, run BinLorry to extract the binned read files:
+```
+snakemake --snakefile ~/artic-ncov2019/rampart/pipelines/get_consensus/Snakefile \
+--config \
+basecalled_path=path/to/fastq_pass \
+fast5_path=path/to/fast5_pass \
+annotated_path=../annotations \
+barcodes=NB01,NB02,NB03
+```
+
+### Detailed usage: 1) Binning
+
+
+Double check you're in the ``analysis`` directory (type ``pwd``). 
+
+To make use of the output of RAMPART, run BinLorry to extract the binned read files:
 
 ```
 binlorry -i path/to/fastq_pass \
--t path/to/annotations \
+-t ../annotations \
 -o binned \
 -n 400 \
 -x 700 \
@@ -145,6 +155,14 @@ binlorry -i path/to/fastq_pass \
 --force-output \
 --out-report
 ```
+
+BinLorry will iterate through your files and create a binned fastq and csv file for each barcode specified. e.g. for barcodes NB01, NB02 and NB03, the files produced will be:
+binned_NB01.fastq
+binned_NB02.fastq
+binned_NB03.fastq
+and a corresponding csv file.
+
+### Detailed usage: 2) Gather
 
 We then collect all the FASTQ files (typically stored in files each containing 4000 reads) into a single file.
 
@@ -163,7 +181,7 @@ We use a length filter here of between 400 and 700 to remove obviously chimeric 
 
 You will now have a file called: run_name_fastq_pass.fastq and a file called run_name_sequencing_summary.txt, as well as individual files for each barcode (if previously demultiplexed).
 
-### Create the nanopolish index:
+### Detailed usage: 3) Create the nanopolish index:
 
 ```bash
 nanopolish index -s run_name_sequencing_summary.txt -d /path/to/fast5_pass run_name_fastq_pass.fastq
@@ -171,7 +189,7 @@ nanopolish index -s run_name_sequencing_summary.txt -d /path/to/fast5_pass run_n
 
 Again, alter ``/path/to/fast5_pass`` to point to the location of the FAST5 files.
 
-## Run the MinION pipeline
+## Detailed usage: 4) Run the MinION pipeline
 
 For each barcode you wish to process (e.g. run this command 12 times for 12 barcodes), replacing the file name and sample name as appropriate:
 
