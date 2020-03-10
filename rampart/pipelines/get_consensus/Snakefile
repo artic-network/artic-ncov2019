@@ -31,13 +31,11 @@ if config.get("barcodes"):
     print(barcodes)
     for barcode in barcodes:
         barcode_to_samples[barcode] = barcode
-        samples[barcode] = [barcode]
         barcode_string+=barcode + " "
         barcodes.append(barcode)
 else:
     barcodes = ["none"]
     barcode_string = "none"
-    samples["nCoV2019"] = ["none"]
     barcode_to_samples["none"] = "nCoV2019"
 
 
