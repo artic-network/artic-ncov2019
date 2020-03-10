@@ -5,7 +5,7 @@ import os
 from Bio import SeqIO
 
 ##### Configuration #####
-configfile: "config.yaml"
+configfile: workflow.current_basedir + "/config.yaml"
 
 run_name = ""
 if config.get("run_name"):
@@ -190,34 +190,3 @@ rule minion_nanopolish:
         {params.primer_version} \
         {params.sample_name} 
         """
-
-
-# rule gather:
-#     input:
-#     params:
-#         path_to_reads = config["basecalled_path"]
-#     output:
-#         summary=f"{run_name}_sequencing_summary.txt",
-#         reads=f"{run_name}_fastq_pass.fastq"
-#     shell:
-#         """
-#         artic gather \
-#         --min-length {params.min_length} \
-#         --max-length {params.max_length} \
-#         --prefix {params.run_name} \
-#         --directory {params.path_to_reads} 
-#         """
-
-# rule nanopolish_index: 
-#     input:
-#         summary = rules.gather.output.summary,
-#         reads = rules.gather.output.reads
-#     params:
-#         path_to_fast5= lambda wildcards : config["path_to_fast5"]
-#     output:
-#         fai= run_name+"_all.fastq.index.fai",
-#         gzi= run_name+"_all.fastq.index.gzi",
-#         readdb= run_name+"_all.fastq.index.readdb",
-#         index=run_name+"_all.fastq.index"
-#     shell:
-#         "nanopolish index -s {input.summary} -d {params.path_to_fast5} {input.reads}"
