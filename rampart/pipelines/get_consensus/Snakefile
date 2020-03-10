@@ -172,7 +172,7 @@ rule minion_nanopolish:
         readdb= "binned_{barcode}.fastq.index.readdb",
         index= "binned_{barcode}.fastq.index"
     params:
-        primer_scheme_dir = "../../../primer_schemes",
+        primer_scheme_dir = workflow.current_basedir + "/../../../primer_schemes",
         primer_version = "nCoV-2019/V1",
         sample_name = "{barcode}"
     output:
