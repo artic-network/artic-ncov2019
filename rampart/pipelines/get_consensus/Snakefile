@@ -52,6 +52,7 @@ if config.get("samples"):
 elif config.get("barcodes"):
     try:
         handle = config["barcodes"]
+        barcodes = yaml.safe_load(handle)
         for barcode in barcodes:
             barcode_to_samples[barcode] = barcode
             samples[barcode] = [barcode]
@@ -59,9 +60,9 @@ elif config.get("barcodes"):
             barcodes.append(barcode)
     except:
         barcodes = ["none"]
-        barcode_string = "none"
-        samples["nCoV2019"] = ["none"]
-        barcode_to_samples["none"] = "nCoV2019"
+    barcode_string = "none"
+    samples["nCoV2019"] = ["none"]
+    barcode_to_samples["none"] = "nCoV2019"
 else:
     barcodes = ["none"]
     barcode_string = "none"
