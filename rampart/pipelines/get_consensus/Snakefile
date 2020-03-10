@@ -67,7 +67,8 @@ else:
 rule all:
     input:
         expand("binned_{barcode}.csv",barcode=barcodes),
-        f"{run_name}_sequencing_summary.txt"
+        f"{run_name}_sequencing_summary.txt",
+        expand("{barcode}.consensus.fasta",barcode=barcodes)
         
 
 rule binlorry:
@@ -111,6 +112,7 @@ rule get_sequencing_summary_file:
         print(f"Number of sequencing summary files found: {len(summary_files)}")
 
         summaryfh = open(str(output[0]), "w")
+        dfs = []
         for summaryfn in summary_files:
             df = pd.read_csv(summaryfn, sep="\t")
             # support for local basecalling
