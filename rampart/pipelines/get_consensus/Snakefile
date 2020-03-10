@@ -26,13 +26,15 @@ barcodes = []
 barcode_to_samples = {}
 
 if config.get("barcodes"):
-    barcodes = config["barcodes"]
+    barcode_config = config["barcodes"]
+    barcodes = barcode_config.split(",")
+    config["barcodes"] = barcodes
 
     print(barcodes)
     for barcode in barcodes:
         barcode_to_samples[barcode] = barcode
         barcode_string+=barcode + " "
-        barcodes.append(barcode)
+
 else:
     barcodes = ["none"]
     barcode_string = "none"
