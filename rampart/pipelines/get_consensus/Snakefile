@@ -123,29 +123,6 @@ rule get_sequencing_summary_file:
         pd.concat(dfs).to_csv(summaryfh, sep="\t", index=False)
         summaryfh.close()
         
-# rule minion_medaka:
-#     input:
-#         read_file = "binned_{barcode}.fastq"
-#     params:
-#         primer_scheme_dir = "../../primer_schemes",
-#         primer_version = "nCoV-2019/V1",
-#         sample_name = "{barcode}"
-#     threads:
-#         8
-#     output:
-#         "{barcode}.primertrimmed.sorted.bam",
-#         "{barcode}.primertrimmed.vcf",
-#         "{barcode}.alignreport.txt",
-#         "{barcode}.consensus.fasta"
-#     shell:
-#         """
-#         artic minion \
-#         --medaka --normalise 200 --minimap2 \
-#         --scheme-directory {params.primer_scheme_dir} \
-#         --read-file {input.read_file} \
-#         {params.primer_version} \
-#         {params.barcode} 
-#         """
 
 rule nanopolish_index: 
     input:
