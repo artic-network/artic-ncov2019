@@ -31,7 +31,18 @@ barcode_string = ''
 barcodes = []
 barcode_to_samples = {}
 
-if config.get("barcodes"):
+if config.get("samples"):
+    handle = config["samples"]
+    samples = yaml.safe_load(handle)
+
+    for s in samples:
+        for barcode in samples[s]:
+            barcode_string += barcode + " "
+            barcodes.append(barcode)
+            barcode_to_samples[barcode]=s
+    barcode_string = barcode_string.rstrip(" ")
+
+elif config.get("barcodes"):
     barcode_config = config["barcodes"]
     barcodes = barcode_config.split(",")
     config["barcodes"] = barcodes
