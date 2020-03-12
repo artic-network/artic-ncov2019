@@ -58,7 +58,7 @@ rule binlorry:
         min_read_length = config["min_read_length"],
         max_read_length = config["max_read_length"],
         barcode_str = barcode_string,
-        output_prefix= "binned"
+        output_prefix= "./binned"
     output:
         expand("binned_{barcode}.fastq",barcode = barcodes),
         expand("binned_{barcode}.csv",barcode = barcodes)
