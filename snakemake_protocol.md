@@ -124,6 +124,8 @@ fast5_path=path/to/fast5_pass \
 annotated_path=../annotations 
 ```
 
+Substitute in the appropriate ``path/to/fastq_pass`` and ``path/to/fast5_pass`` for your particular run. If you have run basecalling with MinKNOW, everything up to ``fastq_pass`` and ``fast5_pass`` should be identical.  
+
 ### Quick usage: Generate a consensus sequence for each barcode using the ARTIC pipeline
 e.g. to run the ARTIC pipeline for barcodes NB01, NB02 and NB03
 
