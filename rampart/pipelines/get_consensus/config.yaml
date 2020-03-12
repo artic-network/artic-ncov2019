@@ -1,7 +1,7 @@
 ##### Where is the data? #####
 
-fast5_path: path/to/fast5
-basecalled_path: path/to/data
+# fast5_path: path/to/fast5
+# basecalled_path: path/to/data
 annotated_path: annotations
 
 
