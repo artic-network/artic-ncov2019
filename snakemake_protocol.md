@@ -83,12 +83,19 @@ This will create a folder called `run_name` with the base-called reads in it.
 
 Double check you're in the correct directory (Hint: type ``pwd`` into your terminal). You should be in your MinION run directory.
 
+Make a directory for you to put your analysis and navigate into it.
+
+```
+mkdir analysis
+cd analysis
+```
+
 ### Running RAMPART
 
 Ensure you have activated the conda environment and then simply type:
 
 ```
-rampart --protocol ~/artic-ncov2019/rampart
+rampart --protocol ~/artic-ncov2019/rampart --basecalledPath /path/to/reads/
 ```
 
 In a web browser, navigate to localhost:3000 to view your samples on RAMPART.
@@ -100,41 +107,47 @@ In a web browser, navigate to localhost:3000 to view your samples on RAMPART.
 Open a new terminal window and navigate to your run directory again e.g. minion_run1.
 
 ```
-cd minion_run1
+cd minion_run1/analysis
 ```
 
 If RAMPART has run successfully you will see a directory has been created in here called ``annotations`` (Hint: type ``ls`` to see if this directory exists).
-
-Make a directory for you to put your analysis and navigate into it.
-
-```
-mkdir analysis
-cd analysis
-```
 
 ### Quick usage: Generate a consensus sequence using the ARTIC pipeline
 
 If you haven't used barcodes and are just running one sample, simply type:
 
 ```
+postbox -p ~/artic-ncov2019 basecalled_path=path/to/fastq_pass
+```
+
+If you want to run the command using snakemake run:
+```
 snakemake --snakefile ~/artic-ncov2019/rampart/pipelines/get_consensus/Snakefile \
 --config \
 basecalled_path=path/to/fastq_pass \
-fast5_path=path/to/fast5_pass \
-annotated_path=../annotations 
+annotated_path=./annotations \
 ```
 
-Substitute in the appropriate ``path/to/fastq_pass`` and ``path/to/fast5_pass`` for your particular run. If you have run basecalling with MinKNOW, everything up to ``fastq_pass`` and ``fast5_pass`` should be identical.  
+Substitute in the appropriate ``path/to/fastq_pass`` for your particular run. If you have not run basecalling with MinKNOW, you will have to also specify where your fast5 files are. 
+
+```
+postbox -p ~/artic-ncov2019 basecalled_path=path/to/fastq_pass fast5_path=path/to/fast5_pass
+```
 
 ### Quick usage: Generate a consensus sequence for each barcode using the ARTIC pipeline
 e.g. to run the ARTIC pipeline for barcodes NB01, NB02 and NB03
 
 ```
+postbox -p ~/artic-ncov2019 basecalled_path=path/to/fastq_pass barcodes=NB01,NB02,NB03
+```
+
+or: 
+
+```
 snakemake --snakefile ~/artic-ncov2019/rampart/pipelines/get_consensus/Snakefile \
 --config \
 basecalled_path=path/to/fastq_pass \
-fast5_path=path/to/fast5_pass \
-annotated_path=../annotations \
+annotated_path=./annotations \
 barcodes=NB01,NB02,NB03
 ```
 
