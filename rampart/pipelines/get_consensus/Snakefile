@@ -13,8 +13,16 @@ if config.get("run_name"):
 else:
     run_name = "nCoV2019"
 
+
 config["basecalled_path"] = config["basecalled_path"].rstrip("/")
-config["fast5_path"] = config["fast5_path"].rstrip("/")
+
+if config.get("fast5_path"):
+    config["fast5_path"] = config["fast5_path"].rstrip("/")
+elif config.get("fast5Path"):
+    config["fast5_path"] = config["fast5Path"].rstrip("/")
+else:
+    fast5_path = config["basecalled_path"].rstrip("fastq_pass") + "fast5_pass"
+    config["fast5_path"] = fast5_path
 
 if config.get("annotated_path"):
     config["annotated_path"] = config["annotated_path"].rstrip("/")
