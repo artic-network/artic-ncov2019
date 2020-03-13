@@ -29,7 +29,7 @@ else:
 
 barcode_string = ''
 barcodes = []
-barcode_to_samples = {}
+barcode_to_sample = {}
 
 if config.get("samples"):
     handle = config["samples"]
@@ -39,7 +39,7 @@ if config.get("samples"):
         for barcode in samples[s]:
             barcode_string += barcode + " "
             barcodes.append(barcode)
-            barcode_to_samples[barcode]=s
+            barcode_to_sample[barcode]=s
     barcode_string = barcode_string.rstrip(" ")
 
 elif config.get("barcodes"):
@@ -49,13 +49,13 @@ elif config.get("barcodes"):
 
     print(barcodes)
     for barcode in barcodes:
-        barcode_to_samples[barcode] = barcode
+        barcode_to_sample[barcode] = barcode
         barcode_string+=barcode + " "
 
 else:
     barcodes = ["none"]
     barcode_string = "none"
-    barcode_to_samples["none"] = "nCoV2019"
+    barcode_to_sample["none"] = "nCoV2019"
 
 
 ##### Workflow #####
@@ -64,7 +64,8 @@ rule all:
     input:
         expand("binned_{barcode}.csv",barcode=barcodes),
         f"{run_name}_sequencing_summary.txt",
-        expand("{barcode}.consensus.fasta",barcode=barcodes)
+        expand("{barcode}.consensus.fasta",barcode=barcodes),
+        f"consensus_sequences/{run_name}.consensus.fasta"
         
 
 rule binlorry:
@@ -162,3 +163,21 @@ rule minion_nanopolish:
         {params.primer_version} \
         {params.sample_name} 
         """
+
+rule tidy_up:
+    input:
+        expand("{barcode}.consensus.fasta", barcode = barcodes)
+    params:
+        barcode_to_sample = barcode_to_samples
+    output:
+        f"consensus_sequences/{run_name}.consensus.fasta"
+    run:
+        with open(str(output[0]),"w") as fw:
+            for r,d,f in os.walk("."):
+                for fn in f:
+                    if fn.endswith(".consensus.fasta"):
+                        for record in SeqIO.parse(r + '/' + fn,"fasta"):
+                            barcode = record.id.split(".")[0]
+                            sample = params.barcode_to_sample[barcode]
+                            fw.write(f">{sample} barcode={barcode} length={len(record.seq)}\n{record.seq}\n")
+
