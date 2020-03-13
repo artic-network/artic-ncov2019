@@ -90,9 +90,44 @@ mkdir analysis
 cd analysis
 ```
 
+### *Optional* setup for RAMPART
+Recommended: you can just do this step in the file browser! 
+
+Use the template in ``examples`` to generate the barcodes.csv. Double click on the file in ``examples`` to open it, click the button with three lines and click “Save as”. Save this file inside your ``run_name/analysis`` directory that you’ve just made, keep the same name.
+
+Replace the barcodes and sample names in the barcodes.csv template with the ones from your MinION run. Make sure your sample names don’t have spaces in them and are unique! 
+
+Use the template in ``examples`` to generate the run_configuration.json. 
+
+Replace the example path with the path to your basecalled reads (i.e. fastq files). 
+
+#### Do you know where your basecalled reads are?
+
+Explore where MinKNOW has put the data from your run (use the terminal).
+
+Hint: press the Tab key to autocomplete the directory names. 
+
+Type:
+
+```
+ls /var/lib/MinKNOW/data (Hint: press tab, tab, tab, tab ...)
+```
+
+Fill in the path with tab until you see fastq_pass as one of the directories.
+
+```
+cd /var/lib/MinKNOW/data/run_name/.../.../fastq_pass
+```
+
+where /.../.../ represents the string of letters and numbers MinKNOW generates for each run. The run_name will be whatever you told MinKNOW your run name was.
+
+It is important to be able to find this data in order to do the bioinformatic analysis. In this directory, you will find four directories containing the FAST5 files and also the FASTQ files, with a pass and fail directory for each of them.
+
 ### Running RAMPART
 
-Ensure you have activated the conda environment and then simply type:
+Navigate to the directory run_name/analysis.
+
+Ensure you have activated the conda environment (``conda activate artic-pipeline``) and then simply type:
 
 ```
 rampart --protocol ~/artic-ncov2019/rampart --basecalledPath /path/to/reads/
@@ -101,6 +136,7 @@ rampart --protocol ~/artic-ncov2019/rampart --basecalledPath /path/to/reads/
 In a web browser, navigate to localhost:3000 to view your samples on RAMPART.
 (Note: this does not require an internet connection)  
 
+If you completed the optional setup and you have a run_configuration.json file, you can omit the --basecalledPath argument from the command line, provided you are in the analysis directory.
 
 ### Setup for consensus generation
 
@@ -114,18 +150,18 @@ If RAMPART has run successfully you will see a directory has been created in her
 
 ### Quick usage: Generate a consensus sequence using the ARTIC pipeline
 
+Provided you have a run_configuration.json file:
+
 If you haven't used barcodes and are just running one sample, simply type:
 
 ```
-postbox -p ~/artic-ncov2019 basecalled_path=path/to/fastq_pass
+postbox -p ~/artic-ncov2019
 ```
 
-If you want to run the command using snakemake run:
+If not, run:
+
 ```
-snakemake --snakefile ~/artic-ncov2019/rampart/pipelines/get_consensus/Snakefile \
---config \
-basecalled_path=path/to/fastq_pass \
-annotated_path=./annotations \
+postbox -p ~/artic-ncov2019 --basecalled_path 
 ```
 
 Substitute in the appropriate ``path/to/fastq_pass`` for your particular run. If you have not run basecalling with MinKNOW, you will have to also specify where your fast5 files are. 
