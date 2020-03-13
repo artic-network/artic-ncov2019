@@ -41,7 +41,8 @@ if config.get("samples"):
             barcodes.append(barcode)
             barcode_to_sample[barcode]=s
     barcode_string = barcode_string.rstrip(" ")
-
+    print("1",barcode_string)
+    print(barcode_to_sample)
 elif config.get("barcodes"):
     barcode_config = config["barcodes"]
     barcodes = barcode_config.split(",")
@@ -51,12 +52,14 @@ elif config.get("barcodes"):
     for barcode in barcodes:
         barcode_to_sample[barcode] = barcode
         barcode_string+=barcode + " "
-
+    print("2",barcode_string)
+    print(barcode_to_sample)
 else:
     barcodes = ["none"]
     barcode_string = "none"
     barcode_to_sample["none"] = "nCoV2019"
-
+    print("3",barcode_string)
+    print(barcode_to_sample)
 
 ##### Workflow #####
 
