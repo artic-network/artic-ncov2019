@@ -42,7 +42,7 @@ if config.get("samples"):
             barcode_to_sample[barcode]=s
     print(barcodes)
     barcode_string = barcode_string.rstrip(" ")
-
+    config["barcodes"]= barcodes
     print("1",barcode_string)
     print(barcode_to_sample)
 elif config.get("barcodes"):
@@ -171,7 +171,7 @@ rule minion_nanopolish:
 
 rule tidy_up:
     input:
-        expand("{barcode}.consensus.fasta", barcode = barcodes)
+        expand("{barcode}.consensus.fasta", barcode = config["barcodes"])
     params:
         barcode_to_sample = barcode_to_sample
     output:
