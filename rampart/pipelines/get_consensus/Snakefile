@@ -40,29 +40,35 @@ if config.get("samples"):
             barcode_string += barcode + " "
             barcodes.append(barcode)
             barcode_to_sample[barcode]=s
-    print(barcodes)
     barcode_string = barcode_string.rstrip(" ")
     config["barcodes"]= barcodes
-    print("1",barcode_string)
-    print(barcode_to_sample)
+    print("Found samples in configuration.\n")
+    print("barcode\tsample")
+    for barcode in barcode_to_sample:
+        print(barcode,'\t',barcode_to_sample[barcode])
+
 elif config.get("barcodes"):
     barcode_config = config["barcodes"]
     barcodes = barcode_config.split(",")
     config["barcodes"] = barcodes
 
-    print(barcodes)
     for barcode in barcodes:
         barcode_to_sample[barcode] = barcode
         barcode_string+=barcode + " "
-    print("2",barcode_string)
-    print(barcode_to_sample)
+
+    print("Found barcodes in configuration.\n")
+    print("barcode\tsample")
+    for barcode in barcode_to_sample:
+        print(barcode,'\t',barcode_to_sample[barcode])
 else:
     barcodes = ["none"]
     barcode_string = "none"
     barcode_to_sample["none"] = "nCoV2019"
-    print("3",barcode_string)
-    print(barcode_to_sample)
 
+    print("Found no barcode or sample information in configuration.\n")
+    print("barcode\tsample")
+    for barcode in barcode_to_sample:
+        print(barcode,'\t',barcode_to_sample[barcode])
 ##### Workflow #####
 
 rule all:
@@ -177,7 +183,6 @@ rule tidy_up:
     output:
         f"consensus_sequences/{run_name}.fasta"
     run:
-        print(barcode_to_sample)
         with open(str(output[0]),"w") as fw:
             for r,d,f in os.walk("."):
                 for fn in f:
