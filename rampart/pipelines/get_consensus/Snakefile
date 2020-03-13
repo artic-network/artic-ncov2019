@@ -40,7 +40,9 @@ if config.get("samples"):
             barcode_string += barcode + " "
             barcodes.append(barcode)
             barcode_to_sample[barcode]=s
+    print(barcodes)
     barcode_string = barcode_string.rstrip(" ")
+
     print("1",barcode_string)
     print(barcode_to_sample)
 elif config.get("barcodes"):
