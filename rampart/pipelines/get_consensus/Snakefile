@@ -172,6 +172,7 @@ rule tidy_up:
     output:
         f"consensus_sequences/{run_name}.consensus.fasta"
     run:
+        print(barcode_to_sample)
         with open(str(output[0]),"w") as fw:
             for r,d,f in os.walk("."):
                 for fn in f:
