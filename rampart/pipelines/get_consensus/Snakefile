@@ -179,6 +179,7 @@ rule tidy_up:
                     if fn.endswith(".consensus.fasta"):
                         for record in SeqIO.parse(r + '/' + fn,"fasta"):
                             barcode = record.id.split(".")[0]
+                            print(barcode)
                             sample = params.barcode_to_sample[barcode]
                             fw.write(f">{sample} barcode={barcode} length={len(record.seq)}\n{record.seq}\n")
 
