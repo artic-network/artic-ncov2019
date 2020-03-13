@@ -168,7 +168,7 @@ rule tidy_up:
     input:
         expand("{barcode}.consensus.fasta", barcode = barcodes)
     params:
-        barcode_to_sample = barcode_to_samples
+        barcode_to_sample = barcode_to_sample
     output:
         f"consensus_sequences/{run_name}.consensus.fasta"
     run:
