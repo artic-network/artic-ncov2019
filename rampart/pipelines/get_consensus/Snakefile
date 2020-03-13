@@ -70,7 +70,7 @@ rule all:
         expand("binned_{barcode}.csv",barcode=barcodes),
         f"{run_name}_sequencing_summary.txt",
         expand("{barcode}.consensus.fasta",barcode=barcodes),
-        f"consensus_sequences/{run_name}.consensus.fasta"
+        f"consensus_sequences/{run_name}.fasta"
         
 
 rule binlorry:
