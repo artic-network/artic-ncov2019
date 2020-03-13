@@ -32,10 +32,10 @@ Set up the computing environment as described here in this document: [ncov2019-i
 
 ### Activate the ARTIC environment:
 
-All steps in this tutorial should be performed in the ```artic-ncov2019``` conda environment:
+All steps in this document should be performed in the ```artic-pipeline``` conda environment:
 
 ```bash
-source activate artic-ncov2019
+source activate artic-pipeline
 ```
 
 ### Make a new directory for analysis
@@ -93,11 +93,11 @@ cd analysis
 ### *Optional* setup for RAMPART
 Recommended: you can just do this step in the file browser! 
 
-Use the template in ``examples`` to generate the barcodes.csv. Double click on the file in ``examples`` to open it, click the button with three lines and click “Save as”. Save this file inside your ``run_name/analysis`` directory that you’ve just made, keep the same name.
+Use the template in ``examples`` to generate the ``barcodes.csv``. Double click on the file in ``examples`` to open it, click the button with three lines and click “Save as”. Save this file inside your ``run_name/analysis`` directory that you’ve just made, keep the same name.
 
-Replace the barcodes and sample names in the barcodes.csv template with the ones from your MinION run. Make sure your sample names don’t have spaces in them and are unique! 
+Replace the barcodes and sample names in the ``barcodes.csv`` template with the ones from your MinION run. Make sure your sample names don’t have spaces in them and are unique! 
 
-Use the template in ``examples`` to generate the run_configuration.json. 
+Use the template in ``examples`` to generate the ``run_configuration.json``. 
 
 Replace the example path with the path to your basecalled reads (i.e. fastq files). 
 
@@ -110,7 +110,7 @@ Hint: press the Tab key to autocomplete the directory names.
 Type:
 
 ```
-ls /var/lib/MinKNOW/data (Hint: press tab, tab, tab, tab ...)
+ls /var/lib/MinKNOW/data (*Hint*: press tab, tab, tab, tab ...)
 ```
 
 Fill in the path with tab until you see fastq_pass as one of the directories.
