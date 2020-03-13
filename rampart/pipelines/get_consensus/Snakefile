@@ -170,7 +170,7 @@ rule tidy_up:
     params:
         barcode_to_sample = barcode_to_sample
     output:
-        f"consensus_sequences/{run_name}.consensus.fasta"
+        f"consensus_sequences/{run_name}.fasta"
     run:
         print(barcode_to_sample)
         with open(str(output[0]),"w") as fw:
@@ -178,8 +178,7 @@ rule tidy_up:
                 for fn in f:
                     if fn.endswith(".consensus.fasta"):
                         for record in SeqIO.parse(r + '/' + fn,"fasta"):
-                            barcode = record.id.split(".")[0]
-                            print(barcode)
+                            barcode = fn.split(".")[0]
                             sample = params.barcode_to_sample[barcode]
                             fw.write(f">{sample} barcode={barcode} length={len(record.seq)}\n{record.seq}\n")
 
