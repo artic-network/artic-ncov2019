@@ -2,9 +2,35 @@
 
 Initial implementation of an ARTIC bioinformatics platform for nanopore sequencing of nCoV2019 novel coronavirus.
 
+  * [Preparation](#preparation)
+    * [Access edinburgh branch](#access-edinburgh-branch)
+    * [Activate the ARTIC environment](#activate-the-artic-environment)
+    * [Make a new directory for analysis](#make-a-new-directory-for-analysis)
+  * [Step 1: Basecalling](#step-1:-basecalling)
+    * [Basecalling with MinKNOW (live)](#basecalling-with-minknow-(live))
+    * [Basecalling with Guppy](#basecalling-with-guppy)
+    * [Basecalling and demultiplexing with Guppy](#basecalling-and-demultiplexing-with-guppy)
+  * [Step 2: Data analysis](#step-2:-data-analysis)
+    * [*Optional* setup for RAMPART](#optional-setup-for-rampart)
+    * [Do you know where your basecalled reads are?](#do-you-know-where-your-basecalled-reads-are?)
+    * [Running RAMPART](#running-rampart)
+    * [Setup for consensus generation](#setup-for-consensus-generation)
+  * [Quick usage](#quick-usage-generate-a-consensus-sequence-using-the-artic-pipeline)
+    * [Quick usage: Generate a consensus sequence using the ARTIC pipeline](#quick-usage-generate-a-consensus-sequence-using-the-artic-pipeline)
+    * [Quick usage: Generate a consensus sequence for each barcode using the ARTIC pipeline](#quick-usage-generate-a-consensus-sequence-for-each-barcode-using-the-artic-pipeline)
+  * [Quick usage: Output files](#quick-usage:-output-files)
+  * [Detailed usage](#detailed-usage:-1-binning)
+     * [Detailed usage: 1) Binning](#detailed-usage:-1-binning)
+     * [Detailed usage: 2) Gather](#detailed-usage:-2-gather)
+     * [Detailed usage: 3) Create the nanopolish index](#detailed-usage:-3-create-the-nanopolish-index)
+     * [Detailed usage: 4) Run the MinION pipeline](#detailed-usage:-4-run-the-minion-pipeline)
+  * [ARTIC MinION Output files](#artic-minion-output-files)
+
 ## Preparation
 
 Set up the computing environment as described here in this document: [ncov2019-it-setup](ncov2019-it-setup.html). This should be done and tested prior to sequencing, particularly if this will be done in an environment without internet access or where this is slow or unreliable. Once this is done, the bioinformatics can be performed largely off-line. If you are already using the [lab-on-an-SSD](https://github.com/artic-network/fieldbioinformatics/tree/master/lab-on-an-ssd), you can skip this step.
+
+### Access edinburgh branch
 
 You should checkout the ``edinburgh`` branch of the artic-ncov2019 repository:
 
@@ -13,7 +39,7 @@ cd ~/artic-ncov2019
 git checkout edinburgh
 ```
 
-### Activate the ARTIC environment:
+### Activate the ARTIC environment
 
 All steps in this document should be performed in the ```artic-pipeline``` conda environment:
 
@@ -234,7 +260,7 @@ We use a length filter here of between 400 and 700 to remove obviously chimeric 
 
 You will now have a file called: run_name_fastq_pass.fastq and a file called run_name_sequencing_summary.txt, as well as individual files for each barcode (if previously demultiplexed).
 
-### Detailed usage: 3) Create the nanopolish index:
+### Detailed usage: 3) Create the nanopolish index
 
 ```bash
 nanopolish index -s run_name_sequencing_summary.txt -d /path/to/fast5_pass run_name_fastq_pass.fastq
