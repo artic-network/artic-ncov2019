@@ -1,7 +1,7 @@
 # artic-ncov2019
 
 Initial implementation of an ARTIC bioinformatics platform for nanopore sequencing of nCoV2019 novel coronavirus.
-This pipeline is setup to run in conjunction with RAMPART. It accesses the barcoding and mapping information from the RAMPART output and uses this to bin reads. It then spawns off Nick Loman's ARTIC MinION pipeline to run nanopolish. It's final output is to take the consensus sequences for each barcode, give the sequence headers the sample name with other metadata about the sequence (length, barcode, number of N's) and compiles them into a single fasta file found in the ``consensus_sequences`` directory produced.
+This pipeline is setup to run in conjunction with RAMPART. It accesses the barcoding and mapping information from the RAMPART output and uses this to bin reads. It then spawns off Nick Loman's ARTIC MinION pipeline to run nanopolish. It's final output is to take the consensus sequences for each barcode, give the sequence headers the sample name with other metadata about the sequence (length, barcode, number of N's) and compiles them into a single fasta file found in the ``consensus_sequences`` directory produced. There is also some compatibility with guppy barcoding, but only once the run has finished.
 
 ## Documentation
   * [Preparation](#preparation)
@@ -12,9 +12,9 @@ This pipeline is setup to run in conjunction with RAMPART. It accesses the barco
     * [Basecalling with MinKNOW (live)](#basecalling-with-minknow-(live))
     * [Basecalling with Guppy](#basecalling-with-guppy)
     * [Basecalling and demultiplexing with Guppy](#basecalling-and-demultiplexing-with-guppy)
-  * [Step 2: Data analysis](#step-2:-data-analysis)
+  * [Step 2: Data analysis](#step-2-data-analysis)
     * [*Optional* setup for RAMPART](#optional-setup-for-rampart)
-    * [Do you know where your basecalled reads are?](#do-you-know-where-your-basecalled-reads-are?)
+    * [Do you know where your basecalled reads are?](#do-you-know-where-your-basecalled-reads-are)
     * [Running RAMPART](#running-rampart)
     * [Setup for consensus generation](#setup-for-consensus-generation)
   * [Quick usage](#quick-usage-generate-a-consensus-sequence-using-the-artic-pipeline)
