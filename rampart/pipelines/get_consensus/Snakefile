@@ -19,6 +19,7 @@ config["basecalled_path"] = config["basecalled_path"].rstrip("/")
 if config.get("fast5_path"):
     config["fast5_path"] = config["fast5_path"].rstrip("/")
 else:
+    print("No fast5 path given, assuming fast5_pass in same directory as fastq_pass")
     fast5_path = config["basecalled_path"].rstrip("fastq_pass") + "fast5_pass"
     config["fast5_path"] = fast5_path
 
@@ -69,11 +70,12 @@ else:
     print("barcode\tsample")
     for barcode in barcode_to_sample:
         print(barcode,'\t',barcode_to_sample[barcode])
+
 ##### Workflow #####
 
 rule all:
     input:
-        expand("binned_{barcode}.csv",barcode=barcodes),
+        expand("binned_{barcode}.fastq",barcode=barcodes),
         f"{run_name}_sequencing_summary.txt",
         expand("{barcode}.consensus.fasta",barcode=barcodes),
         f"consensus_sequences/{run_name}.fasta"
@@ -89,8 +91,7 @@ rule binlorry:
         barcode_str = barcode_string,
         output_prefix= "./binned"
     output:
-        expand("binned_{barcode}.fastq",barcode = barcodes),
-        expand("binned_{barcode}.csv",barcode = barcodes)
+        expand("binned_{barcode}.fastq",barcode = barcodes)
     shell:
         "binlorry -i {params.path_to_reads:q} "
         "-t {params.report_dir:q} "
