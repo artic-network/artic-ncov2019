@@ -1,7 +1,9 @@
 # artic-ncov2019
 
 Initial implementation of an ARTIC bioinformatics platform for nanopore sequencing of nCoV2019 novel coronavirus.
+This pipeline is setup to run in conjunction with RAMPART. It accesses the barcoding and mapping information from the RAMPART output and uses this to bin reads. It then spawns off Nick Loman's ARTIC MinION pipeline to run nanopolish. It's final output is to take the consensus sequences for each barcode, give the sequence headers the sample name with other metadata about the sequence (length, barcode, number of N's) and compiles them into a single fasta file found in the ``consensus_sequences`` directory produced.
 
+## Documentation
   * [Preparation](#preparation)
     * [Access edinburgh branch](#access-edinburgh-branch)
     * [Activate the ARTIC environment](#activate-the-artic-environment)
