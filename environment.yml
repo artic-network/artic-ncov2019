@@ -1,4 +1,4 @@
-name: artic-ncov2019
+name: artic-pipeline
 channels:
   - conda-forge
   - bioconda

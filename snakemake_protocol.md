@@ -29,6 +29,13 @@ content='**Overview:** A complete bioinformatics protocol to take the output fro
 
 Set up the computing environment as described here in this document: [ncov2019-it-setup](ncov2019-it-setup.html). This should be done and tested prior to sequencing, particularly if this will be done in an environment without internet access or where this is slow or unreliable. Once this is done, the bioinformatics can be performed largely off-line. If you are already using the [lab-on-an-SSD](https://github.com/artic-network/fieldbioinformatics/tree/master/lab-on-an-ssd), you can skip this step.
 
+You should checkout the ``edinburgh`` branch of the artic-ncov2019 repository:
+
+```bash
+cd ~/artic-ncov2019
+git checkout edinburgh
+```
+
 ### Activate the ARTIC environment:
 
 All steps in this document should be performed in the ```artic-pipeline``` conda environment:
@@ -77,6 +84,20 @@ run are. Common locations are:
    - Windows ```c:/data/reads```
    
 This will create a folder called `run_name` with the base-called reads in it.
+
+### Basecalling and demultiplexing with Guppy
+
+Although not recommended, as RAMPART can demultiplex in real-time but is not currently compatible with guppy demultiplexing, if you have run MinKNOW with barcoding turned on, you can still run this pipeline after your run has finished.
+
+To essentially meet the pipeline where RAMPART would have left off, do the following:
+
+For example, to run for barcodes barcode01, barcode02 and barcode03, from the directory your demultiplexed files are in, run:
+
+```
+snakemake --snakefile ~/artic-ncov2019/guppy_barcoding/Snakefile --config barcodes=barcode01,barcode02,barcode03
+```
+
+Setup as you would for running RAMPART in the Optional setup for RAMPART (i.e. create a run_configuration.json file that points to your basecalledPath and a barcodes.csv.) and you can run postbox as you would below.
 
 ## Step 2: Data analysis
 
