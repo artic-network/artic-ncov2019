@@ -20,7 +20,7 @@ This pipeline is setup to run in conjunction with RAMPART. It accesses the barco
   * [Quick usage](#quick-usage-generate-a-consensus-sequence-using-the-artic-pipeline)
     * [Quick usage: Generate a consensus sequence using the ARTIC pipeline](#quick-usage-generate-a-consensus-sequence-using-the-artic-pipeline)
     * [Quick usage: Generate a consensus sequence for each barcode using the ARTIC pipeline](#quick-usage-generate-a-consensus-sequence-for-each-barcode-using-the-artic-pipeline)
-  * [Quick usage: Output files](#quick-usage:-output-files)
+  * [Quick usage: Output files](#quick-usage-output-files)
   * [Detailed usage](#detailed-usage-1-binning)
      * [Detailed usage: 1) Binning](#detailed-usage-1-binning)
      * [Detailed usage: 2) Gather](#detailed-usage-2-gather)
