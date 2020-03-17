@@ -1,0 +1,12 @@
+##### Where is the data? #####
+
+annotated_path: annotations
+
+
+##### Read length filtering range #####
+
+min_read_length: 370
+max_read_length: 700
+
+
+##### Barcodes to process #####

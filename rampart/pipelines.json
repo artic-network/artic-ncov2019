@@ -1,0 +1,26 @@
+{
+	"analysis": 
+		{
+			"name": "Generate COV19 consensus",
+            "path": "pipelines/get_consensus",
+            "processing": true,
+            "config_file": "config.yaml",
+            "requires": [
+                {
+                    "file": "references.fasta",
+                    "config_key": "references_file"
+                }
+            ],
+            "run_per_sample": true,
+            "options": {
+                "min_read_length": true,
+                "max_read_length": true,
+                "references_file": true,
+                "sample_name": true,
+                "barcodes": true,
+                "basecalled_path": true,
+                "annotated_path": true,
+                "output_path": true
+            }
+		}
+}

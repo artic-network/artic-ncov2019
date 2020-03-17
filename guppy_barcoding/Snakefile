@@ -1,0 +1,113 @@
+import yaml 
+import csv
+import pandas as pd
+import os
+from Bio import SeqIO
+
+#### Configuration #####
+configfile: workflow.current_basedir + "/config.yaml"
+
+run_name = ""
+if config.get("run_name"):
+    run_name = config["run_name"]
+else:
+    run_name = "nCoV2019"
+
+if config.get("basecalled_path"):
+    config["basecalled_path"] = config["basecalled_path"].rstrip("/") + "/"
+else:
+    config["basecalled_path"]=""
+
+if config.get("output_path"):
+    config["output_path"] = config["output_path"].rstrip("/") + "/"
+else:
+    config["output_path"]="."
+
+
+barcode_string = ''
+barcodes = []
+barcode_to_sample = {}
+
+if config.get("samples"):
+    handle = config["samples"]
+    samples = yaml.safe_load(handle)
+
+    for s in samples:
+        for barcode in samples[s]:
+            barcode_string += barcode + " "
+            barcodes.append(barcode)
+            barcode_to_sample[barcode]=s
+    barcode_string = barcode_string.rstrip(" ")
+    config["barcodes"]= barcodes
+    print("Found samples in configuration.\n")
+    print("barcode\tsample")
+    for barcode in barcode_to_sample:
+        print(barcode,'\t',barcode_to_sample[barcode])
+
+elif config.get("barcodes"):
+    barcode_config = config["barcodes"]
+    barcodes = barcode_config.split(",")
+    config["barcodes"] = barcodes
+
+    for barcode in barcodes:
+        barcode_to_sample[barcode] = barcode
+        barcode_string+=barcode + " "
+
+    print("Found barcodes in configuration.\n")
+    print("barcode\tsample")
+    for barcode in barcode_to_sample:
+        print(barcode,'\t',barcode_to_sample[barcode])
+else:
+    barcodes = ["none"]
+    barcode_string = "none"
+    barcode_to_sample["none"] = "nCoV2019"
+
+    print("Found no barcode or sample information in configuration.\n")
+    print("barcode\tsample")
+    for barcode in barcode_to_sample:
+        print(barcode,'\t',barcode_to_sample[barcode])
+        
+##### Workflow #####
+
+rule all:
+    input:
+        expand("binned_{barcode}.fastq",barcode=barcodes)
+        
+rule minimap2:
+    input:
+        fastq= config["basecalled_path"] + "{barcode}.fastq",
+        ref= workflow.current_basedir + "/../rampart/references.fasta"
+    output:
+        temp("temp/{barcode}.paf")
+    shell:
+        """
+        minimap2 -x map-ont \
+        --secondary=no \
+        --paf-no-hit \
+        --cs \
+        {input.ref:q} \
+        {input.fastq:q} > {output:q}
+        """
+        
+rule parse_mapping:
+    input:
+        fastq= config["basecalled_path"] + "{barcode}.fastq",
+        mapped= "temp/{barcode}.paf"
+    params:
+        path_to_script = workflow.current_basedir,
+        barcode= "{barcode}",
+        min_length = config["min_read_length"],
+        max_length = config["max_read_length"],
+        outdir = config["output_path"]
+    output:
+        fastq = "binned_{barcode}.fastq"
+    shell:
+        """
+        python {params.path_to_script}/parse_guppy_barcoding.py \
+        --paf_file {input.mapped:q} \
+        --reads {input.fastq:q} \
+        -o {params.outdir} \
+        -b {params.barcode} \
+        -n {params.min_length} \
+        -x {params.max_length}
+        """

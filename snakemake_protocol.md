@@ -1,12 +1,33 @@
-# artic-ncov2019
+---
+title: "nCoV-2019 novel coronavirus Nanopore sequencing bioinformatics protocol | amplicon, native barcoding"
+keywords: protocol
+layout: document
+last_updated: Jan 23, 2020
+tags: [protocol]
+permalink: /ncov-2019/ncov2019-bioinformatics-sop.html
+folder: ncov
+title_text: "nCoV-2019 novel coronavirus bioinformatics protocol"
+subtitle_text: "Nanopore | bioinformatics"
+document_name: "ARTIC-nCoV-bioinformaticsSOP"
+version: v1.0.0
+creation_date: 2020-01-23
+forked_from: 
+author: Nick Loman, Andrew Rambaut, Aine O'Toole
+citation: "Loman *et al.* In Prep."
+nav_menu: false
+show_tile: false
+category: ncov
+---
 
-Initial implementation of an ARTIC bioinformatics platform for nanopore sequencing of nCoV2019 novel coronavirus. 
-
+{% include callout.html
+type='default'
+content='**Overview:** A complete bioinformatics protocol to take the output from the [sequencing protocol](/ebov/ebov-seq-sop.html) to consensus genome sequences. Includes basecalling, de-multiplexing, mapping, polishing and consensus generation.
+'
+%}
 
 ## Preparation
 
 Set up the computing environment as described here in this document: [ncov2019-it-setup](ncov2019-it-setup.html). This should be done and tested prior to sequencing, particularly if this will be done in an environment without internet access or where this is slow or unreliable. Once this is done, the bioinformatics can be performed largely off-line. If you are already using the [lab-on-an-SSD](https://github.com/artic-network/fieldbioinformatics/tree/master/lab-on-an-ssd), you can skip this step.
-
 
 ### Activate the ARTIC environment:
 
