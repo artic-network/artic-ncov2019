@@ -13,7 +13,15 @@ if config.get("run_name"):
 else:
     run_name = "nCoV2019"
 
-config["basecalled_path"] = config["basecalled_path"].rstrip("/")
+if config.get("basecalled_path"):
+    config["basecalled_path"] = config["basecalled_path"].rstrip("/") + "/"
+else:
+    config["basecalled_path"]=""
+
+if config.get("output_path"):
+    config["output_path"] = config["output_path"].rstrip("/") + "/"
+else:
+    config["output_path"]="."
 
 
 barcode_string = ''
@@ -67,8 +75,8 @@ rule all:
         
 rule minimap2:
     input:
-        fastq= config["basecalled_path"] + "/{barcode}.fastq",
-        ref= workflow.current_basedir + "../rampart/references.fasta"
+        fastq= config["basecalled_path"] + "{barcode}.fastq",
+        ref= workflow.current_basedir + "/../rampart/references.fasta"
     output:
         temp("temp/{barcode}.paf")
     shell:
@@ -83,12 +91,13 @@ rule minimap2:
         
 rule parse_mapping:
     input:
-        fastq= config["basecalled_path"] + "/{barcode}.fastq",
+        fastq= config["basecalled_path"] + "{barcode}.fastq",
         mapped= "temp/{barcode}.paf"
     params:
         path_to_script = workflow.current_basedir,
-        min_length = config["min_length"],
-        max_length = config["max_length"],
+        barcode= "{barcode}",
+        min_length = config["min_read_length"],
+        max_length = config["max_read_length"],
         outdir = config["output_path"]
     output:
         fastq = "binned_{barcode}.fastq"
@@ -98,6 +107,7 @@ rule parse_mapping:
         --paf_file {input.mapped:q} \
         --reads {input.fastq:q} \
         -o {params.outdir} \
+        -b {params.barcode} \
         -n {params.min_length} \
         -x {params.max_length}
         """
