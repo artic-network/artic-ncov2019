@@ -178,18 +178,28 @@ rule minion_nanopolish:
 
 rule tidy_up:
     input:
-        expand("{barcode}.consensus.fasta", barcode = config["barcodes"])
+        expand("{barcode}.consensus.fasta", barcode = config["barcodes"]),
+        expand("{barcode}.primertrimmed.sorted.bam", barcode = config["barcodes"])
     params:
         barcode_to_sample = barcode_to_sample
     output:
         f"consensus_sequences/{run_name}.fasta"
     run:
+        shell("mkdir ./CLIMB")
+        for barcode in barcode_to_sample:
+            sample = params.barcode_to_sample[barcode]
+            shell("mkdir ./CLIMB/" + sample)
+        
         with open(str(output[0]),"w") as fw:
             for r,d,f in os.walk("."):
                 for fn in f:
                     if fn.endswith(".consensus.fasta"):
+                        
                         for record in SeqIO.parse(r + '/' + fn,"fasta"):
                             barcode = fn.split(".")[0]
                             sample = params.barcode_to_sample[barcode]
+                            shell("cp " + r + '/' + fn + " ./CLIMB/"+sample+ "/" + sample + ".fasta")
+                            shell("cp " + r + '/' + barcode + ".primertrimmed.sorted.bam" + " ./CLIMB/"+sample+ "/" + sample + ".bam")
                             fw.write(f">{sample} barcode={barcode} length={len(record.seq)}\n{record.seq}\n")
+                
 
