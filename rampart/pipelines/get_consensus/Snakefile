@@ -20,7 +20,7 @@ if config.get("fast5_path"):
     config["fast5_path"] = config["fast5_path"].rstrip("/")
 else:
     print("No fast5 path given, assuming fast5_pass in same directory as fastq_pass")
-    fast5_path = config["basecalled_path"].rstrip("fastq_pass") + "fast5_pass"
+    fast5_path = config["basecalled_path"].rstrip("fastq_pass") + "/fast5_pass"
     config["fast5_path"] = fast5_path
 
 if config.get("annotated_path"):
