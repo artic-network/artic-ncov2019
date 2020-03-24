@@ -198,7 +198,7 @@ rule tidy_up:
                         for record in SeqIO.parse(r + '/' + fn,"fasta"):
                             barcode = fn.split(".")[0]
                             sample = params.barcode_to_sample[barcode]
-                            fw2 = open(" ./CLIMB/"+sample+ "/" + sample + ".fasta","w")
+                            fw2 = open("./CLIMB/"+sample+ "/" + sample + ".fasta","w")
                             shell("cp " + r + '/' + barcode + ".primertrimmed.sorted.bam" + " ./CLIMB/"+sample+ "/" + sample + ".bam")
                             fw.write(f">{sample} barcode={barcode} length={len(record.seq)}\n{record.seq}\n")
                             fw2.write(f">{sample} barcode={barcode} length={len(record.seq)}\n{record.seq}\n")
