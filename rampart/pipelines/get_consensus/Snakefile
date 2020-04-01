@@ -101,7 +101,6 @@ rule binlorry:
         "-v 0 "
         "--bin-by barcode "
         "--filter-by barcode {params.barcode_str} "
-        "--filter-by best_reference nCoV2019 "
         "--force-output "
         "--out-report"
 
