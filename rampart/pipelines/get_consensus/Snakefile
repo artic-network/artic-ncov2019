@@ -37,10 +37,13 @@ if config.get("samples"):
     samples = yaml.safe_load(handle)
 
     for s in samples:
-        for barcode in samples[s]:
-            barcode_string += barcode + " "
-            barcodes.append(barcode)
-            barcode_to_sample[barcode]=s
+        if s.lower()=="negative":
+            pass
+        else:
+            for barcode in samples[s]:
+                barcode_string += barcode + " "
+                barcodes.append(barcode)
+                barcode_to_sample[barcode]=s
     barcode_string = barcode_string.rstrip(" ")
     config["barcodes"]= barcodes
     print("Found samples in configuration.\n")
