@@ -108,14 +108,14 @@ rule binlorry:
 rule get_sequencing_summary_file:
     input:
     params:
-        path_to_reads = config["basecalled_path"]
+        path_to_reads = config["basecalled_path"]+'/..'
     output:
         f"{run_name}_sequencing_summary.txt"
     run:
         summary_files = []
         for r,d,f in os.walk(str(params.path_to_reads)):
             for fn in f:
-                if fn.endswith("_summary.txt"):
+                if fn.startswith("sequencing_summary"):
                     summary_files.append(r + '/' + fn)
         print(f"Number of sequencing summary files found: {len(summary_files)}")
 
