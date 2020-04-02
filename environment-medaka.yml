@@ -27,7 +27,7 @@ dependencies:
   - datrie=0.8
   - longshot=0.4.1
   - snakemake-minimal=5.8.1
-  - artic-network::rampart=1.0
+  - artic-network::rampart=1.1
   - pip
   - pip:
     - git+https://github.com/artic-network/fieldbioinformatics.git
