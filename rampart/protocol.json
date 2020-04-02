@@ -3,8 +3,8 @@
   "description": "Amplicon based sequencing of novel coronavirus 2019 (nCoV2019).",
   "url": "http://artic.network/",
   "displayOptions": {
-    	"coverageThresholds": {
-    		">200x": 200, ">100x": 100, ">20x": 20, "0x": 0
-	}
+    "coverageThresholds": {
+      ">200x": 200, ">100x": 100, ">20x": 20, "0x": 0
+    }
   }
 }
