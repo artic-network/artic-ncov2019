@@ -12,7 +12,6 @@ dependencies:
   - python=3.6.7
   - pyvcf=0.6.8
   - samtools=1.9
-  - python=3
   - nodejs=12
   - bwa=0.7.17=pl5.22.0_2
   - clint=0.5.1=py36_0
