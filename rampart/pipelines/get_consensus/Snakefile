@@ -110,7 +110,7 @@ rule binlorry:
 rule get_sequencing_summary_file:
     input:
     params:
-        path_to_reads = config["basecalled_path"]+'/..'
+        path_to_reads = config["basecalled_path"]
     output:
         f"{run_name}_sequencing_summary.txt"
     run:
@@ -187,8 +187,9 @@ rule tidy_up:
     output:
         f"consensus_sequences/{run_name}.fasta"
     run:
-        shell("mkdir ./CLIMB")
-        for barcode in barcode_to_sample:
+        if not os.path.exists("./CLIMB"):
+            shell("mkdir ./CLIMB")
+        for barcode in barcodes:
             sample = params.barcode_to_sample[barcode]
             shell("mkdir ./CLIMB/" + sample)
         
