@@ -191,20 +191,22 @@ rule tidy_up:
             shell("mkdir ./CLIMB")
         for barcode in barcodes:
             sample = params.barcode_to_sample[barcode]
-            shell("mkdir ./CLIMB/" + sample)
+            if not os.path.exists("./CLIMB/"+sample):
+                shell("mkdir ./CLIMB/" + sample)
         
         with open(str(output[0]),"w") as fw:
             for r,d,f in os.walk("."):
                 for fn in f:
                     if fn.endswith(".consensus.fasta"):
-                        
-                        for record in SeqIO.parse(r + '/' + fn,"fasta"):
-                            barcode = fn.split(".")[0]
-                            sample = params.barcode_to_sample[barcode]
-                            fw2 = open("./CLIMB/"+sample+ "/" + sample + ".fasta","w")
-                            shell("cp " + r + '/' + barcode + ".primertrimmed.sorted.bam" + " ./CLIMB/"+sample+ "/" + sample + ".bam")
-                            fw.write(f">{sample} barcode={barcode} length={len(record.seq)}\n{record.seq}\n")
-                            fw2.write(f">{sample} barcode={barcode} length={len(record.seq)}\n{record.seq}\n")
-                            fw2.close()
+                        barcode = fn.rstrip(".consensus.fasta")
+                        if barcode in params.barcode_to_samples.values():
+                            for record in SeqIO.parse(r + '/' + fn,"fasta"):
+                                barcode = fn.split(".")[0]
+                                sample = params.barcode_to_sample[barcode]
+                                fw2 = open("./CLIMB/"+sample+ "/" + sample + ".fasta","w")
+                                shell("cp " + r + '/' + barcode + ".primertrimmed.sorted.bam" + " ./CLIMB/"+sample+ "/" + sample + ".bam")
+                                fw.write(f">{sample} barcode={barcode} length={len(record.seq)}\n{record.seq}\n")
+                                fw2.write(f">{sample} barcode={barcode} length={len(record.seq)}\n{record.seq}\n")
+                                fw2.close()
                 
 
