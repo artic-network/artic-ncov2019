@@ -4,6 +4,8 @@ import pandas as pd
 import os
 from Bio import SeqIO
 
+
+cwd = os.getcwd()
 ##### Configuration #####
 configfile: workflow.current_basedir + "/config.yaml"
 
@@ -195,18 +197,23 @@ rule tidy_up:
                 shell("mkdir ./CLIMB/" + sample)
         
         with open(str(output[0]),"w") as fw:
-            for r,d,f in os.walk("."):
+            for r,d,f in os.walk(cwd):
                 for fn in f:
                     if fn.endswith(".consensus.fasta"):
                         barcode = fn.rstrip(".consensus.fasta")
-                        if barcode in params.barcode_to_sample.values():
+
+                        if barcode in params.barcode_to_sample.keys():
+                            
                             for record in SeqIO.parse(r + '/' + fn,"fasta"):
                                 barcode = fn.split(".")[0]
                                 sample = params.barcode_to_sample[barcode]
-                                fw2 = open("./CLIMB/"+sample+ "/" + sample + ".fasta","w")
+                                fw2 = open(cwd + "/CLIMB/"+sample+ "/" + sample + ".fasta","w")
+
                                 shell("cp " + r + '/' + barcode + ".primertrimmed.sorted.bam" + " ./CLIMB/"+sample+ "/" + sample + ".bam")
                                 fw.write(f">{sample} barcode={barcode} length={len(record.seq)}\n{record.seq}\n")
                                 fw2.write(f">{sample} barcode={barcode} length={len(record.seq)}\n{record.seq}\n")
                                 fw2.close()
+                            else:
+                                print("Barcode not found", barcode)
                 
 
