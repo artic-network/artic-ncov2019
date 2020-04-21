@@ -199,7 +199,7 @@ rule tidy_up:
                 for fn in f:
                     if fn.endswith(".consensus.fasta"):
                         barcode = fn.rstrip(".consensus.fasta")
-                        if barcode in params.barcode_to_samples.values():
+                        if barcode in params.barcode_to_sample.values():
                             for record in SeqIO.parse(r + '/' + fn,"fasta"):
                                 barcode = fn.split(".")[0]
                                 sample = params.barcode_to_sample[barcode]
