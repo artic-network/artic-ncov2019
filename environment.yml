@@ -5,7 +5,7 @@ channels:
   - defaults
 dependencies:
   - artic=1.1.1
-  - artic-network::rampart=1.0
+  - artic-network::rampart=1.2.0
   - datrie=0.8
   - eigen=3.2=3
   - ete3=3.1.1=py36_0
