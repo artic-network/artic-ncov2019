@@ -1,0 +1,7 @@
+This primer scheme is not based on V3 but a new scheme designed to avoid high frequency variants in Alpha, Beta, Gamma, Delta as well as B.1.429, B.1.525 and B.1.617.1. We have valididated that we do not see S-gene drop outs for Beta and Delta. It was made by generating pseudo genomes using FASTQ files from representative samples and processing using (https://github.com/jts/ncov2019-artic-nf) with tip variants removed. These consensus genomes were concatendated to use as the input file for primalscheme v1.3.1 which includes checks for 3' stable heterodimers (Itokawa et al. 2020). 
+
+A guide to pooling volumes to get even coverage is;
+17, 27, 30, 61, 74 (5x volume)
+13, 45, 79 (2x volume) 
+Everything else (1x volume)
+
