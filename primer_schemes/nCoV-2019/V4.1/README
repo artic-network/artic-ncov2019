@@ -1,0 +1,37 @@
+This primer scheme is an update to the V4 scheme which restores the funtionality of some primers against the Omicron variant. The following changes are made;
+
+Added to pool 1:
+SARS-CoV-2_23_RIGHT_alt1
+SARS-CoV-2_27_RIGHT_alt1
+SARS-CoV-2_79_RIGHT_alt1
+SARS-CoV-2_89_LEFT_alt1
+SARS-CoV-2_89_RIGHT_alt1
+
+Added to pool 2:
+SARS-CoV-2_10_LEFT_alt1
+SARS-CoV-2_10_RIGHT_alt1
+SARS-CoV-2_76_LEFT_alt1
+SARS-CoV-2_76_RIGHT_alt1
+SARS-CoV-2_88_LEFT_alt1
+SARS-CoV-2_90_RIGHT_alt1
+
+Guide to pooling volumes are;
+
+2x volume:
+SARS-CoV-2_1_LEFT & SARS-CoV-2_1_RIGHT
+SARS-CoV-2_7_LEFT & SARS-CoV-2_7_RIGHT
+SARS-CoV-2_13_LEFT & SARS-CoV-2_13_RIGHT
+SARS-CoV-2_17_LEFT & SARS-CoV-2_17_RIGHT
+SARS-CoV-2_27_LEFT & SARS-CoV-2_27_RIGHT
+SARS-CoV-2_45_LEFT & SARS-CoV-2_45_RIGHT
+SARS-CoV-2_59_LEFT & SARS-CoV-2_59_RIGHT
+SARS-CoV-2_60_LEFT & SARS-CoV-2_60_RIGHT
+SARS-CoV-2_61_LEFT & SARS-CoV-2_61_RIGHT
+SARS-CoV-2_64_LEFT & SARS-CoV-2_64_RIGHT
+SARS-CoV-2_79_LEFT & SARS-CoV-2_79_RIGHT
+SARS-CoV-2_90_LEFT & SARS-CoV-2_90_RIGHT
+SARS-CoV-2_91_LEFT & SARS-CoV-2_91_RIGHT
+
+1x volume:
+All other primers including alts.
+
